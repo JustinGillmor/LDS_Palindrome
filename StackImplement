@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class StackImplement 
+{
+	//Using an ArrayList to represent the stack
+	ArrayList<Integer> stackImplementation;
+	
+	//Constructor
+	public StackImplement()
+	{
+		stackImplementation = new ArrayList<>();
+	}
+	
+	//pop() method that will return the most recently added value and will remove the item for the list
+	public int pop()
+	{
+		if(stackImplementation.isEmpty() == false)
+		{
+			int topValue = stackImplementation.get(stackImplementation.size()-1);
+			stackImplementation.remove(stackImplementation.size()-1);
+			return topValue;
+		}
+		else
+		{
+			System.out.println("The stack is empty");
+			return 0;
+		}
+	}
+	
+	//push() method that will add the indicated value to the top of the stack
+	public void push(int value)
+	{
+		stackImplementation.add(value);
+	}
+	
+	//top() method that will return the most recently added integer
+	public int top()
+	{
+		return stackImplementation.get(stackImplementation.size()-1);
+	}
+
+	//isEmpty() method that will return true if the list is empty and false if it isnt
+	public boolean isEmpty()
+	{
+		if(stackImplementation.isEmpty() == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
