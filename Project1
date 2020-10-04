@@ -1,0 +1,163 @@
+import java.util.*;
+
+public class Project1 
+{
+	
+	public static void main(String args[])
+	{
+		int rangeBottom = -1;
+		int rangeTop = -2;
+		Scanner input = new Scanner(System.in);
+		
+		//This takes care of the error cases and will not proceed until there is valid input
+		while((rangeBottom < 0 || rangeTop < 0) || (rangeBottom > rangeTop))
+		{
+			System.out.print("Input range > ");
+			rangeBottom = input.nextInt();
+			rangeTop = input.nextInt();
+			
+			if(rangeBottom < 0 || rangeTop < 0)
+			{
+				System.out.print("Error: Invalid value entered. All values must be greater than zero. Try Again\n");
+			}
+			if((rangeBottom > rangeTop) && (rangeBottom > 0 && rangeTop > 0))
+			{
+				System.out.print("Error: First number is larger than second number. Try Again\n");
+			}
+		}
+		input.close();
+		ArrayList<Integer> confirmPalindrome = new ArrayList<Integer>();
+		ArrayList<String> confirmPalindromeBinary = new ArrayList<String>();
+		//If the value within the range is a palindrone in binary and decimal, the value gets add to the list
+		for(int i = rangeBottom; i <= rangeTop; i++)
+		{
+			if ((Project1.decimalCheck(i) == true) && (Project1.binaryCheck(i) == true))
+			{
+				confirmPalindrome.add(i);
+			}
+		}
+		
+		//Loop that will go through each palindrome and concactenate its binary counterpart into a string
+		//and it will place it in a list in the same order
+		for (int i = 0; i < confirmPalindrome.size(); i++)
+		{
+			String binaryReult = "";
+			int binaryConversion = confirmPalindrome.get(i);
+			while (binaryConversion > 0)
+			{
+				//Checks to see if there is a remainder if it is divided by two, then assigns a 1 or a 0 depending on the result
+				//Will concatenate numbers together in the correct order until the conversion factor is zero
+				if (binaryConversion % 2 == 1)
+				{
+					binaryReult = 1 + binaryReult;
+				}
+					else
+					{
+						binaryReult = 0 + binaryReult;
+					}
+					binaryConversion = binaryConversion / 2;
+			}
+			confirmPalindromeBinary.add(binaryReult);
+		}
+		
+		System.out.print("Palindromes:\n" + "Base 10       Binary\n");
+		for(int i = 0; i < confirmPalindrome.size(); i++)
+		{
+			System.out.printf("%-14d%s\n", confirmPalindrome.get(i), confirmPalindromeBinary.get(i));
+		}	
+	}	
+
+	//This method is used to check to see if the current input from the range is a decimal palindrome
+	public static boolean decimalCheck(int currentNumber)
+	{
+		//Create the stack and the variables that will be used
+		Stack<Integer> decimalStack = new Stack<Integer>();
+		int digFinder = currentNumber;
+		int numOfDigits = 0;
+		
+		//This will find the amount of digits in the current number
+		while(digFinder != 0)
+		{
+			digFinder = digFinder / 10;
+			numOfDigits++;
+		}
+		
+		//This sets items into the list and stack to compare later
+		//Created a list with as many elements as there are digits in the number evaluated
+		ArrayList<Integer> digitList = new ArrayList<Integer>(numOfDigits);
+		int remainder = currentNumber;
+		while(remainder != 0)
+		{
+			digitList.add(remainder % 10);
+			decimalStack.push((Integer)remainder % 10);
+			remainder = remainder / 10;
+		}
+		
+		//Checks the multiple digit numbers by checking the first digit in the list
+		//and comparing it to the last digit that was added, If the digits match, it moves on
+		Boolean palindrome = true;
+		for(int i = 0; i < digitList.size() - 1; i++)
+		{
+			if(digitList.get(i) != decimalStack.pop())
+			{
+				palindrome = false;
+				break;
+			}
+		}
+		
+		//Automatically assumes all numbers 1-9 are a palindrome
+		if(currentNumber > 0 && currentNumber < 10)
+		{
+			palindrome = true;
+		}
+		return palindrome;	
+	}
+	
+	
+	
+	//Basically the same exact structure as decimalCheck
+	public static boolean binaryCheck(int currentNumber)
+	{
+		//Create the stack and the variables that will be used
+		Stack<Integer> binaryStack = new Stack<Integer>();
+		int digFinder = currentNumber;
+		int numOfDigits = 0;
+		
+		//This will find the amount of digits in the current number
+		while(digFinder != 0)
+		{
+			digFinder = digFinder / 2;
+			numOfDigits++;
+		}
+		
+		//This sets items into the list and stack to compare later
+		//Created a list with as many elements as there are digits in the number evaluated
+		ArrayList<Integer> digitList = new ArrayList<Integer>(numOfDigits);
+		int remainder = currentNumber;
+		while(remainder != 0)
+		{
+			digitList.add(remainder % 2);
+			binaryStack.push((Integer)remainder % 2);
+			remainder = remainder / 2;
+		}
+		
+		//Checks the multiple digit numbers by checking the first digit in the list
+		//and comparing it to the last digit that was added, If the digits match, it moves on
+		Boolean palindrome = true;
+		for(int i = 0; i < digitList.size() - 1; i++)
+		{
+			if(digitList.get(i) != binaryStack.pop())
+			{
+				palindrome = false;
+				break;
+			}
+		}
+		
+		//Takes the single digit binary numbers into account
+		if(currentNumber == 1 || currentNumber == 3 || currentNumber == 7)
+		{
+			palindrome = true;
+		}
+		return palindrome;
+	}
+}
